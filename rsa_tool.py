@@ -1,7 +1,7 @@
 import argparse
 from generate_keys import generate_keys
-from encrypt import encrypt_message_from_file
-from decrypt import decrypt_message_from_file
+from rsa_encrypt import encrypt_message_from_file
+from rsa_decrypt import decrypt_message_from_file
 
 def main():
     parser = argparse.ArgumentParser(description="RSA Encryption/Decryption Tool")
