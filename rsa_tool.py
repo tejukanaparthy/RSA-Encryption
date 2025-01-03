@@ -1,51 +1,37 @@
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
-from Crypto.Random import get_random_bytes
-import base64
+import argparse
+from generate_keys import generate_keys
+from encrypt import encrypt_message_from_file
+from decrypt import decrypt_message_from_file
 
-def generate_keys():
-    key = RSA.generate(2048)
-    private_key = key.export_key()
-    public_key = key.publickey().export_key()
+def main():
+    parser = argparse.ArgumentParser(description="RSA Encryption/Decryption Tool")
+    subparsers = parser.add_subparsers(dest="command", help="Commands")
 
-    with open('private.pem', 'wb') as priv_file:
-        priv_file.write(private_key)
+    parser_gen = subparsers.add_parser('generate-keys', help="Generate RSA key pair")
+    parser_gen.add_argument('--private', default='private.pem', help="Path to save private key")
+    parser_gen.add_argument('--public', default='public.pem', help="Path to save public key")
 
-    with open('public.pem', 'wb') as pub_file:
-        pub_file.write(public_key)
+    parser_enc = subparsers.add_parser('encrypt', help="Encrypt a message")
+    parser_enc.add_argument('input', help="Path to input plaintext file or message")
+    parser_enc.add_argument('output', help="Path to output encrypted file")
+    parser_enc.add_argument('public_key', help="Path to public key file")
 
-    print("Keys generated and saved as 'private.pem' and 'public.pem'.")
+    parser_dec = subparsers.add_parser('decrypt', help="Decrypt a message")
+    parser_dec.add_argument('input', help="Path to input encrypted file or message")
+    parser_dec.add_argument('output', help="Path to output plaintext file")
+    parser_dec.add_argument('private_key', help="Path to private key file")
 
-def encrypt_message(message, public_key_path):
-    with open(public_key_path, 'rb') as pub_file:
-        public_key = RSA.import_key(pub_file.read())
-    
-    cipher = PKCS1_OAEP.new(public_key)
-    encrypted_msg = cipher.encrypt(message.encode('utf-8'))
-    encoded_encrypted_msg = base64.b64encode(encrypted_msg)
-    
-    return encoded_encrypted_msg
+    args = parser.parse_args()
 
-def decrypt_message(encrypted_message, private_key_path):
-    with open(private_key_path, 'rb') as priv_file:
-        private_key = RSA.import_key(priv_file.read())
-    
-    cipher = PKCS1_OAEP.new(private_key)
-    decoded_encrypted_msg = base64.b64decode(encrypted_message)
-    decrypted_msg = cipher.decrypt(decoded_encrypted_msg)
-
-    return decrypted_msg.decode('utf-8')
+    if args.command == 'generate-keys':
+        generate_keys(args.private, args.public)
+    elif args.command == 'encrypt':
+        encrypt_message_from_file(args.input, args.output, args.public_key)
+    elif args.command == 'decrypt':
+        decrypt_message_from_file(args.input, args.output, args.private_key)
+    else:
+        parser.print_help()
 
 if __name__ == "__main__":
-    try:
-        with open('private.pem', 'rb') as _:
-            pass
-    except FileNotFoundError:
-        generate_keys()
+    main()
 
-    message = "Hello, this is a secure message!"
-    encrypted_message = encrypt_message(message, 'public.pem')
-    print(f"Encrypted message: {encrypted_message.decode('utf-8')}")
-
-    decrypted_message = decrypt_message(encrypted_message, 'private.pem')
-    print(f"Decrypted message: {decrypted_message}")
