@@ -14,13 +14,13 @@ This is a simple RSA encryption and decryption tool written in Python. It allows
 ## Installation
 
 ### Clone the Repository
-    git clone https://github.com/your-username/rsa-encryption.git
+    git clone git@github.com:tejukanaparthy/RSA-Encryption.git
 
 ### Install Dependencies
 
 Navigate to the project directory and install the necessary dependencies:
 
-    cd rsa-encryption
+    cd RSA-Encryption
     pip install -r requirements.txt
 
 # Usage
@@ -40,11 +40,14 @@ Navigate to the project directory and install the necessary dependencies:
     ├── README.md
     ├── requirements.txt
     ├── rsa_encryption_tool.py
-    └── test_files
-    └── input.txt
-- rsa_encryption_tool.py: The main script for encryption and decryption operations.
-- requirements.txt: A file that lists the required Python dependencies.
-- test_files/: A directory containing test files (e.g., input.txt) for testing encryption and decryption.
+    └── test_files/
+        └── input.txt
+    └── encrypted.txt
+    └── decrypted.txt
+
+- **rsa_encryption_tool.py**: The main script for encryption and decryption operations.
+- **requirements.txt**: A file that lists the required Python dependencies.
+- **test_files/**: A directory containing test files (e.g., input.txt) for testing encryption and decryption.
 
 ## Contributing
 
