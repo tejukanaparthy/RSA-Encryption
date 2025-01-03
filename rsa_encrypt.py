@@ -16,14 +16,11 @@ def encrypt_message(message, public_key_path):
 def encrypt_message_from_file(input_file, output_file, public_key_path):
     """Encrypts a message from a file and writes the encrypted message to an output file."""
     try:
-        # Read the message from the input file
         with open(input_file, 'r') as file:
             message = file.read()
 
-        # Encrypt the message using the public key
         encrypted_message = encrypt_message(message, public_key_path)
 
-        # Write the encrypted message to the output file
         with open(output_file, 'wb') as file:
             file.write(encrypted_message)
 
@@ -32,9 +29,8 @@ def encrypt_message_from_file(input_file, output_file, public_key_path):
         print(f"Error during encryption: {e}")
 
 if __name__ == "__main__":
-    # Use the input file from 'test_files/input.txt'
-    input_file = 'test_files/input.txt'
-    output_file = 'encrypted_message.txt'
+    input_file = 'test_files/input.txt'  # Reading from the input file
+    output_file = 'test_files/encrypted_message.txt'  # Output to an encrypted file
     public_key_path = 'public.pem'
 
     encrypt_message_from_file(input_file, output_file, public_key_path)
